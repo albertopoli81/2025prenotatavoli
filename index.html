@@ -1035,34 +1035,47 @@ body
 </div>
 </div>
 <div id="Html16" style="position:absolute;left:46px;top:790px;width:333px;height:61px;z-index:80">
-<h2>Prenota un Tavolo</h2>
-
-<form id="bookingForm" onsubmit="submitForm(event)">
-  <label for="tavolo">Tavolo:</label><br>
-  <input type="number" id="tavolo" name="tavolo" required><br><br>
+<h2>Prenota un tavolo</h2>
+<form id="bookingForm">
+  <label for="tavolo">Tavolo n.:</label><br>
+  <input type="text" id="tavolo" name="tavolo" required><br>
 
   <label for="nome">Nome:</label><br>
-  <input type="text" id="nome" name="nome" required><br><br>
+  <input type="text" id="nome" name="nome" required><br>
 
   <label for="data">Data:</label><br>
-  <input type="date" id="data" name="data" required><br><br>
+  <input type="date" id="data" name="data" required><br>
 
   <label for="ora">Ora:</label><br>
-  <input type="time" id="ora" name="ora" required><br><br>
+  <input type="time" id="ora" name="ora" required><br>
 
-  <button type="submit">Prenota</button>
+  <label for="oratorio">Numero persone in Oratorio:</label><br>
+  <input type="number" id="oratorio" name="oratorio" value="0" min="0" required><br>
+
+  <label for="tendone">Numero persone sotto Tendone:</label><br>
+  <input type="number" id="tendone" name="tendone" value="0" min="0" required><br>
+
+  <label for="note">Note:</label><br>
+  <textarea id="note" name="note"></textarea><br><br>
+
+  <button type="submit">Invia prenotazione</button>
 </form>
 
-<p id="conferma" style="color: green; display: none;">Prenotazione inviata con successo!</p>
+<div id="conferma" style="display:none; margin-top:10px; color:green;">
+  Prenotazione inviata con successo!
+</div>
 
 <script>
-function submitForm(e) {
+document.getElementById("bookingForm").addEventListener("submit", function(e){
   e.preventDefault();
 
   const tavolo = document.getElementById("tavolo").value;
   const nome = document.getElementById("nome").value;
   const data = document.getElementById("data").value;
   const ora = document.getElementById("ora").value;
+  const oratorio = document.getElementById("oratorio").value;
+  const tendone = document.getElementById("tendone").value;
+  const note = document.getElementById("note").value;
 
   const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSe7IhsyjxU68uC0oNPuGXV2GcbTck2ybHrFE7sX2dxaiWiYzg/formResponse";
 
@@ -1071,6 +1084,9 @@ function submitForm(e) {
   formData.append("entry.861377006", nome);
   formData.append("entry.1719921713", data);
   formData.append("entry.1723305176", ora);
+  formData.append("entry.544280017", oratorio);
+  formData.append("entry.1715652247", tendone);
+  formData.append("entry.741144942", note);
 
   fetch(formURL, {
     method: "POST",
@@ -1083,7 +1099,7 @@ function submitForm(e) {
     alert("Errore durante l'invio della prenotazione");
     console.error(error);
   });
-}
+});
 </script>
 </div>
 </body>
