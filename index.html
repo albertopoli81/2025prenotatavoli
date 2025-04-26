@@ -1396,7 +1396,8 @@ document.getElementById("bookingForm").addEventListener("submit", function(e){
         // Mostra i dati nel div prenotazioni
         let html = '<ul>';
         results.data.forEach(function(row) {
-          html += `<li>Tavolo: ${row["Tavolo"]}, Nome: ${row["Nome"]}, Ora: ${row["Ora"]}, Note: ${row["Note"]}</li>`;
+          // Mostra i dati di ogni prenotazione
+          html += `<li>Tavolo n.: ${row["Tavolo n."].toString()}, Nome: ${row["Nome"]}, Data: ${row["Data"]}, Ora: ${row["Ora"]}, Persone Oratorio: ${row["Numero persone Oratorio"]}, Persone Tendone: ${row["Numero persone Tendone"]}, Note: ${row["Note"]}</li>`;
         });
         html += '</ul>';
         document.getElementById('prenotazioni').innerHTML = html;
