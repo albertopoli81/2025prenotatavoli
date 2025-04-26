@@ -1371,32 +1371,38 @@ document.getElementById("bookingForm").addEventListener("submit", function(e){
 
 
 
-<script>
-async function aggiornaMappaTavoli() {
-    const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQreuZsE5AzMdTIeEFCTZ2BtF4nPPMMmg4hM1hGasi3vaCphN9pjRt0HtyCI1WhqRR9uYUGkHC7dj4q/pub?gid=990324621&single=true&output=csv');
-    const data = await response.text();
-    const righe = data.split('\n').map(r => r.split(','));
-    
-    const tavoli = {}; // Tavolo n. ➔ testo da mostrare
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prenotazioni Tavoli</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+</head>
+<body>
+  <h1>Prenotazioni Tavoli</h1>
+  <div id="prenotazioni"></div>
 
-    righe.forEach(riga => {
-        const tavoloNum = riga[0]; // Tavolo n.
-        const nome = riga[1];      // Nome
-        const ora = riga[3];       // Ora
-        if (tavoloNum && nome && ora) {
-            if (!tavoli[tavoloNum]) tavoli[tavoloNum] = [];
-            tavoli[tavoloNum].push(`${nome} ${ora}`);
-        }
+  <script>
+    // URL del CSV
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQreuZsE5AzMdTIeEFCTZ2BtF4nPPMMmg4hM1hGasi3vaCphN9pjRt0HtyCI1WhqRR9uYUGkHC7dj4q/pub?gid=990324621&single=true&output=csv';
+
+    // Carica il CSV e processalo
+    Papa.parse(csvUrl, {
+      download: true,
+      header: true, // Usa la prima riga come intestazione
+      dynamicTyping: true,
+      complete: function(results) {
+        // Mostra i dati nel div prenotazioni
+        let html = '<ul>';
+        results.data.forEach(function(row) {
+          html += `<li>Tavolo: ${row["Tavolo"]}, Nome: ${row["Nome"]}, Ora: ${row["Ora"]}, Note: ${row["Note"]}</li>`;
+        });
+        html += '</ul>';
+        document.getElementById('prenotazioni').innerHTML = html;
+      }
     });
+  </script>
+</body>
+</html>
 
-    // Ora aggiorniamo i div dei tavoli
-    Object.keys(tavoli).forEach(tavoloNum => {
-        const divTavolo = document.getElementById(`tavolo-${tavoloNum}`);
-        if (divTavolo) {
-            divTavolo.innerText = tavoli[tavoloNum].join(' / ');
-        }
-    });
-}
-
-document.addEventListener('DOMContentLoaded', aggiornaMappaTavoli);
-</script>
